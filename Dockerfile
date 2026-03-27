@@ -6,9 +6,10 @@ FROM --platform=linux/amd64 runpod/worker-comfyui:5.5.1-flux1-dev-fp8
 
 # Download Flux-Uncensored-V2 LoRA (~150MB)
 # Source: https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2
+ARG HF_TOKEN
 RUN mkdir -p /comfyui/models/loras && \
     curl -L \
-    -H "Authorization: Bearer $(cat /run/secrets/hf_token 2>/dev/null || echo $HF_TOKEN)" \
+    -H "Authorization: Bearer ${HF_TOKEN}" \
     -o /comfyui/models/loras/Flux-Uncensored-V2.safetensors \
     https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors
 
