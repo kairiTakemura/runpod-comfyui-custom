@@ -1,27 +1,12 @@
-# RunPod ComfyUI Worker with Flux-Uncensored-V2 LoRA
-# Base Image: RunPod Official ComfyUI Worker (FLUX.1-dev FP8 variant)
-# FP8 matches the checkpoint we use: flux1-dev-fp8.safetensors
-# Platform: linux/amd64 (RunPod servers are x86_64)
 FROM --platform=linux/amd64 runpod/worker-comfyui:5.5.1-flux1-dev-fp8
 
-# Install curl
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-# Download Flux-Uncensored-V2 LoRA (~150MB)
-# Source: https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2
 ARG HF_TOKEN
-RUN mkdir -p /comfyui/models/loras && \
-    curl -L --fail \
+RUN echo "Token starts with: $(echo $HF_TOKEN | cut -c1-4)" && \
+    curl -v \
     -H "Authorization: Bearer ${HF_TOKEN}" \
-    -o /comfyui/models/loras/Flux-Uncensored-V2.safetensors \
-    https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors && \
-    ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors
+    "https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors" \
+    -o /dev/null 2>&1 | head -50
 
-# Verify LoRA installation
-RUN ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors || \
-    (echo "❌ LoRA file not found!" && exit 1)
-
-# Label metadata
-LABEL maintainer="eardori"
-LABEL description="RunPod ComfyUI Worker with Flux-Uncensored-V2 LoRA for NSFW image generation"
-LABEL version="1.0.38"
+LABEL version="debug"
