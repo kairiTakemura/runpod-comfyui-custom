@@ -4,6 +4,9 @@
 # Platform: linux/amd64 (RunPod servers are x86_64)
 FROM --platform=linux/amd64 runpod/worker-comfyui:5.5.1-flux1-dev-fp8
 
+# Install curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 # Download Flux-Uncensored-V2 LoRA (~150MB)
 # Source: https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2
 ARG HF_TOKEN
