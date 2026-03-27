@@ -7,8 +7,7 @@ FROM --platform=linux/amd64 runpod/worker-comfyui:5.5.1-flux1-dev-fp8
 # Download Flux-Uncensored-V2 LoRA (~150MB)
 # Source: https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2
 RUN mkdir -p /comfyui/models/loras && \
-    wget -q --follow-location -O /comfyui/models/loras/Flux-Uncensored-V2.safetensors \
-    https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors
+    python3 -c "import urllib.request; urllib.request.urlretrieve('https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors', '/comfyui/models/loras/Flux-Uncensored-V2.safetensors')"
 
 # Verify LoRA installation
 RUN ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors || \
