@@ -3,10 +3,16 @@ FROM --platform=linux/amd64 runpod/worker-comfyui:5.5.1-flux1-dev-fp8
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 ARG HF_TOKEN
-RUN echo "Token starts with: $(echo $HF_TOKEN | cut -c1-4)" && \
-    curl -v \
+RUN mkdir -p /comfyui/models/loras && \
+    curl -L --fail \
     -H "Authorization: Bearer ${HF_TOKEN}" \
-    "https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors" \
-    -o /dev/null 2>&1 | head -50
+    -o /comfyui/models/loras/Flux-Uncensored-V2.safetensors \
+    https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors && \
+    ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors
 
-LABEL version="debug"
+RUN ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors || \
+    (echo "❌ LoRA file not found!" && exit 1)
+
+LABEL maintainer="eardori"
+LABEL description="RunPod ComfyUI Worker with Flux-Uncensored-V2 LoRA for NSFW image generation"
+LABEL version="1.0.38"
