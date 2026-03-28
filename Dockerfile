@@ -7,7 +7,7 @@ RUN mkdir -p /comfyui/models/loras
 ARG HF_TOKEN
 RUN curl -L --fail \
     -H "Authorization: Bearer ${HF_TOKEN}" \
-    https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/Flux-Uncensored-V2.safetensors \
+    https://huggingface.co/enhanceaiteam/Flux-Uncensored-V2/resolve/main/lora.safetensors \
     -o /comfyui/models/loras/Flux-Uncensored-V2.safetensors
 
 RUN ls -lh /comfyui/models/loras/Flux-Uncensored-V2.safetensors
